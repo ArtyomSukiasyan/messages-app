@@ -9,7 +9,7 @@ wss.on("connection", (ws) => {
   ws.send(JSON.stringify({ type: "INIT", messages }));
 });
 
-const handleOptionsRequest = (res) => {
+const handleOptionsRequest = (req, res) => {
   res.writeHead(204);
   res.end();
 };
@@ -41,12 +41,12 @@ const handlePostRequest = (req, res) => {
   });
 };
 
-const handleGetRequest = (res) => {
+const handleGetRequest = (req, res) => {
   res.writeHead(200, { "Content-Type": "application/json" });
   res.end(JSON.stringify({ messages }));
 };
 
-const handleNotFound = (res) => {
+const handleNotFound = (req, res) => {
   res.writeHead(404, { "Content-Type": "application/json" });
   res.end(JSON.stringify({ error: "Not found" }));
 };
