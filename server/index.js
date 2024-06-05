@@ -1,6 +1,6 @@
-const http = require("http");
-const WebSocket = require("ws");
-const url = require("url");
+import http from "http";
+import WebSocket, { WebSocketServer } from "ws";
+import url from "url";
 
 const PORT = 3001;
 const messages = [];
@@ -51,7 +51,7 @@ const server = http.createServer((req, res) => {
   }
 });
 
-const wss = new WebSocket.Server({ noServer: true });
+const wss = new WebSocketServer({ noServer: true });
 
 wss.on("connection", (ws) => {
   ws.send(JSON.stringify({ type: "INIT", messages }));
