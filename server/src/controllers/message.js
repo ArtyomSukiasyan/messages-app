@@ -1,13 +1,7 @@
-import WebSocket, { WebSocketServer } from "ws";
+import { broadcast } from "./webSocket.js";
 
 const messages = [];
 const maxMessages = 9;
-
-const wss = new WebSocketServer({ noServer: true });
-
-wss.on("connection", (ws) => {
-  ws.send(JSON.stringify({ type: "INIT", messages }));
-});
 
 const handleOptionsRequest = (req, res) => {
   res.writeHead(204);
@@ -51,28 +45,10 @@ const handleNotFound = (req, res) => {
   res.end(JSON.stringify({ error: "Not found" }));
 };
 
-const broadcast = (data) => {
-  wss.clients.forEach((client) => {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(JSON.stringify(data));
-    }
-  });
-};
-
-const handleUpgradeMap = (request, socket, head) => {
-  return {
-    "/ws": () =>
-      wss.handleUpgrade(request, socket, head, (ws) => {
-        wss.emit("connection", ws, request);
-      }),
-    default: () => socket.destroy(),
-  };
-};
-
 export {
   handleOptionsRequest,
   handlePostRequest,
   handleGetRequest,
   handleNotFound,
-  handleUpgradeMap,
+  messages,
 };

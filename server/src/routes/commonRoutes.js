@@ -1,4 +1,4 @@
-import { handleOptionsRequest } from "../../handlers.js";
+import { handleOptionsRequest } from "../controllers/message.js";
 
 export const commonRoutes = [
   {

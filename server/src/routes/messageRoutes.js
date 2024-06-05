@@ -1,4 +1,4 @@
-import { handleGetRequest, handlePostRequest } from "../../handlers.js";
+import { handleGetRequest, handlePostRequest } from "../controllers/message.js";
 
 export const messageRoutes = [
   {

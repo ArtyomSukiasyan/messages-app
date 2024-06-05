@@ -1,7 +1,7 @@
 import http from "http";
-import url from "url";
-import { handleUpgradeMap } from "./handlers.js";
-import { routes } from "./src/routes/index.js";
+import urlParser from "url";
+import { handleUpgradeMap } from "./controllers/webSocket.js";
+import { routes } from "./routes/index.js";
 
 const PORT = 3001;
 
@@ -10,13 +10,13 @@ const server = http.createServer((req, res) => {
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-  const { method, url } = req;
+  const { method: reqMethod, url } = req;
 
   const route = routes.find(
-    (r) => r.method === method && (r.path === url || !r.path)
+    ({ method, path }) => method === reqMethod && (path === url || !path)
   );
 
-  if (route && route.action) {
+  if (route) {
     return route.action(req, res);
   }
 
@@ -25,7 +25,7 @@ const server = http.createServer((req, res) => {
 });
 
 server.on("upgrade", (request, socket, head) => {
-  const pathname = url.parse(request.url).pathname;
+  const pathname = urlParser.parse(request.url).pathname;
   const map = handleUpgradeMap(request, socket, head);
 
   const upgradeHandler = map[pathname] || handleUpgradeMap["default"];
