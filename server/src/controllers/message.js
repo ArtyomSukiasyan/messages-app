@@ -40,15 +40,4 @@ const handleGetRequest = (req, res) => {
   res.end(JSON.stringify({ messages }));
 };
 
-const handleNotFound = (req, res) => {
-  res.writeHead(404, { "Content-Type": "application/json" });
-  res.end(JSON.stringify({ error: "Not found" }));
-};
-
-export {
-  handleOptionsRequest,
-  handlePostRequest,
-  handleGetRequest,
-  handleNotFound,
-  messages,
-};
+export { handleOptionsRequest, handlePostRequest, handleGetRequest, messages };

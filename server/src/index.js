@@ -12,9 +12,12 @@ const server = http.createServer((req, res) => {
 
   const { method: reqMethod, url } = req;
 
-  const route = routes.find(
-    ({ method, path }) => method === reqMethod && (path === url || !path)
-  );
+  const route = routes.find(({ method, path }) => {
+    const isValidPath = path === url || !path;
+    const isValidMethod = method === reqMethod;
+
+    return isValidMethod && isValidPath;
+  });
 
   if (route) {
     return route.action(req, res);
@@ -25,7 +28,7 @@ const server = http.createServer((req, res) => {
 });
 
 server.on("upgrade", (request, socket, head) => {
-  const pathname = urlParser.parse(request.url).pathname;
+  const { pathname } = urlParser.parse(request.url);
   const map = handleUpgradeMap(request, socket, head);
 
   const upgradeHandler = map[pathname] || handleUpgradeMap["default"];
