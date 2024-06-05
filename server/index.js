@@ -1,7 +1,7 @@
 import http from "http";
 import url from "url";
 import { handleUpgradeMap } from "./handlers.js";
-import { routes } from "./routes.js";
+import { routes } from "./src/routes/index.js";
 
 const PORT = 3001;
 
