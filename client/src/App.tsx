@@ -1,12 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, FormEvent } from "react";
 import { useQuery, QueryClient, QueryClientProvider } from "react-query";
-
-const http = "http://";
-const wsp = "ws://";
-const host = "localhost";
-const port = 3001;
-const baseUrl = `${http}${host}:${port}`;
-const wsUrl = `${wsp}${host}:${port}`;
+import { baseUrl, wsUrl } from "./constants/urls";
 
 const queryClient = new QueryClient();
 
@@ -36,12 +30,15 @@ const App = () => {
     return () => ws.close();
   }, [refetch]);
 
-  const createMessage = async () => {
+  const createMessage = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
     await fetch(`${baseUrl}/messages`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message: newMessage }),
     });
+    
     setNewMessage("");
   };
 
@@ -49,16 +46,18 @@ const App = () => {
     <div>
       <h1>Messages</h1>
       <ul>
-        {data?.messages.map((message: any, index: any) => (
-          <li key={index}>{message}</li>
+        {data?.messages.map((message: string, idx: number) => (
+          <li key={idx}>{message}</li>
         ))}
       </ul>
-      <input
-        type="text"
-        value={newMessage}
-        onChange={(e) => setNewMessage(e.target.value)}
-      />
-      <button onClick={createMessage}>Send</button>
+      <form onSubmit={(e) => createMessage(e)}>
+        <input
+          type="text"
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
+        />
+        <button type="submit">Send</button>
+      </form>
     </div>
   );
 };
