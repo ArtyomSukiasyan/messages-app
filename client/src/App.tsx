@@ -1,6 +1,9 @@
 import { useState, useEffect, FormEvent } from "react";
 import { useQuery, QueryClient, QueryClientProvider } from "react-query";
+import Messages from "./components/Messages";
 import { baseUrl, wsUrl } from "./constants/urls";
+import "./App.css";
+import { IMessagesData } from "./models/messagesData";
 
 const queryClient = new QueryClient();
 
@@ -10,8 +13,8 @@ const fetchMessages = async () => {
 };
 
 const App = () => {
-  const { data, refetch } = useQuery("messages", fetchMessages);
   const [newMessage, setNewMessage] = useState("");
+  const { data, refetch } = useQuery<IMessagesData>("messages", fetchMessages);
 
   useEffect(() => {
     const ws = new WebSocket(`${wsUrl}/ws`);
@@ -38,26 +41,24 @@ const App = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message: newMessage }),
     });
-    
+
     setNewMessage("");
   };
 
   return (
-    <div>
-      <h1>Messages</h1>
-      <ul>
-        {data?.messages.map((message: string, idx: number) => (
-          <li key={idx}>{message}</li>
-        ))}
-      </ul>
-      <form onSubmit={(e) => createMessage(e)}>
-        <input
-          type="text"
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-        />
-        <button type="submit">Send</button>
-      </form>
+    <div className="container">
+      <div>
+        <h1>Messages</h1>
+        <Messages data={data as IMessagesData} />
+        <form onSubmit={(e) => createMessage(e)}>
+          <input
+            type="text"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+          />
+          <button type="submit">Send</button>
+        </form>
+      </div>
     </div>
   );
 };
