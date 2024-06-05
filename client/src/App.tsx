@@ -1,10 +1,11 @@
-import { useState, useEffect, FormEvent } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, QueryClient, QueryClientProvider } from "react-query";
 import Messages from "./components/Messages";
-import { baseUrl, wsUrl } from "./constants/urls";
-import "./App.css";
-import { IMessagesData } from "./models/messagesData";
 import MessageNotifications from "./components/MessageNotifications";
+import MessageForm from "./components/MessageForm";
+import { baseUrl, wsUrl } from "./constants/urls";
+import { IMessagesData } from "./models/messagesData";
+import "./App.css";
 
 const queryClient = new QueryClient();
 
@@ -14,7 +15,6 @@ const fetchMessages = async () => {
 };
 
 const App = () => {
-  const [message, setMessage] = useState("");
   const [newMessage, setNewMessage] = useState("");
   const { data, refetch } = useQuery<IMessagesData>("messages", fetchMessages);
   const [deletedMessage, setDeletedMessage] = useState("");
@@ -37,18 +37,6 @@ const App = () => {
     return () => ws.close();
   }, [refetch]);
 
-  const createMessage = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    await fetch(`${baseUrl}/messages`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: message }),
-    });
-
-    setMessage("");
-  };
-
   return (
     <div className="container">
       <div>
@@ -58,14 +46,7 @@ const App = () => {
           newMessage={newMessage}
           deletedMessage={deletedMessage}
         />
-        <form onSubmit={(e) => createMessage(e)}>
-          <input
-            type="text"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-          />
-          <button type="submit">Send</button>
-        </form>
+        <MessageForm />
       </div>
     </div>
   );
