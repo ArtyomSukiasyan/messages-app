@@ -4,6 +4,7 @@ const url = require("url");
 
 const PORT = 3001;
 const messages = [];
+const maxMessages = 9;
 
 const server = http.createServer((req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -28,6 +29,11 @@ const server = http.createServer((req, res) => {
         res.writeHead(400, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ error: "Message content is required" }));
         return;
+      }
+
+      if (messages.length >= maxMessages) {
+        const deletedMessage = messages.shift();
+        broadcast({ type: "DELETE", message: deletedMessage });
       }
 
       messages.push(message);
