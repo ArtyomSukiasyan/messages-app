@@ -9,7 +9,7 @@ This project provides a simple WebSocket fronted using React.
 - npm start
 
 ## Tech Stack
-- NodeJS
-- WS package
+- React
+- React Query
 
 Application uses port 3000
