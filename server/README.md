@@ -8,4 +8,9 @@ This project provides a simple WebSocket and HTTP server using Node.js. The serv
 - npm i
 - npm start
 
+## Tech Stack
+
+- NodeJS
+- WS package
+
 Application uses port 3001
