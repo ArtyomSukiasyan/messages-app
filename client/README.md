@@ -8,4 +8,8 @@ This project provides a simple WebSocket fronted using React.
 - npm i
 - npm start
 
+## Tech Stack
+- NodeJS
+- WS package
+
 Application uses port 3000
